@@ -118,3 +118,6 @@ ignoreWhiteSpace = true
 ignoreWithElementOrder = true
 ignoreWithEncryption = false
 ignoreWithNoCheck = true
+
+[environments.QA]
+url = "jdbc:sqlserver://localhost;databaseName=SQLDocker_QA;encrypt=true;integratedSecurity=true;trustServerCertificate=true"
