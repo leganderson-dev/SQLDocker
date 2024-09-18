@@ -9,6 +9,12 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: List files in github workspace
+        run: ls -R /github/workspace
+
       - name: Run Flyway Migrate
         uses: docker://redgate/flyway:10
         with:
