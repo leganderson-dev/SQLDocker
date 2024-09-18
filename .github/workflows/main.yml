@@ -1,4 +1,4 @@
-name: 'Flyway Info'
+name: 'Flyway Migrate'
  
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
         uses: docker://redgate/flyway:10
         with:
           args: >-
-            info
+            migrate
             -workingDirectory="/github/workspace/"
             -url="jdbc:sqlserver://sqldocker.database.windows.net:1433;databaseName=SQLDocker_QA;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;trustServerCertificate=false"
             -user="redgate@sqldocker"
