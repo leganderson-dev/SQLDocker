@@ -9,12 +9,15 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      # Ensure the repository is checked out into the working directory
       - name: Check out repository
         uses: actions/checkout@v2
 
-      - name: List files in github workspace
-        run: ls -R /github/workspace
+      # List files in the current directory (which should be the workspace)
+      - name: List files in the current directory
+        run: ls -R .
 
+      # Run Flyway Migrate
       - name: Run Flyway Migrate
         uses: docker://redgate/flyway:10
         with:
