@@ -17,13 +17,13 @@ jobs:
       - name: List files in the working directory
         run: ls -R .
 
-      # Run Flyway Migrate specifying the full path to the migrations folder
+      # Run Flyway Migrate specifying the migrations folder explicitly
       - name: Run Flyway Migrate
         uses: docker://redgate/flyway:10
         with:
           args: >-
             migrate
-            -workingDirectory="/github/workspace/migrations"
+            -locations=filesystem:/github/workspace/migrations
             -url="jdbc:sqlserver://sqldocker.database.windows.net:1433;databaseName=SQLDocker_QA;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;trustServerCertificate=false"
             -user="redgate@sqldocker"
             -password="Redg@te1"
