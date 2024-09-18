@@ -13,8 +13,8 @@ jobs:
         uses: docker://redgate/flyway:10
         with:
           args: >-
-            migrate
+            info
             -workingDirectory="/github/workspace/"
-            -environment=QA
+            -url="jdbc:sqlserver://localhost;authentication=sqlPassword;databaseName=SQLDocker_QA;encrypt=true;trustServerCertificate=true"
             -user="Redgate"
             -password="Redg@te1"
