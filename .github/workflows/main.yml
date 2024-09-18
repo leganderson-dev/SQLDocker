@@ -15,6 +15,6 @@ jobs:
           args: >-
             info
             -workingDirectory="/github/workspace/"
-            -url="jdbc:sqlserver://DaLab;authentication=sqlPassword;databaseName=SQLDocker_QA;encrypt=true;trustServerCertificate=true"
-            -user="Redgate"
+            -url="jdbc:sqlserver://sqldocker.database.windows.net:1433;databaseName=SQLDocker_QA;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;trustServerCertificate=false"
+            -user="redgate@sqldocker"
             -password="Redg@te1"
