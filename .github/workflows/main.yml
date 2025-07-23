@@ -7,7 +7,7 @@ on:
 
 env:
   DB_USER: sa
-  DB_PWD: Redg@te1
+  DB_PWD: Redg@te
   DB_NAME: SSC
 
 jobs:
