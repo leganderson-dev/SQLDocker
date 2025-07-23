@@ -42,18 +42,7 @@ jobs:
         curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list | sudo tee /etc/apt/sources.list.d/mssql-release.list
         sudo apt-get update
         sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18 mssql-tools18 unixodbc-dev
-        echo "/opt/mssql-tools18/bi        - name: Get logical file names from backup
-          run: |
-            sqlcmd -S "localhost;Encrypt=no" -U $DB_USER -P $DB_PWD -Q "RESTORE FILELISTONLY FROM DISK = N'/var/opt/mssql/backups/SSC.bak'"
-
-        - name: Restore database
-          run: |
-            sqlcmd -S "localhost;Encrypt=no" -U $DB_USER -P $DB_PWD -Q "
-              RESTORE DATABASE [$DB_NAME] FROM DISK = N'/var/opt/mssql/backups/SSC.bak'
-              WITH MOVE 'LogicalDataFileName' TO '/var/opt/mssql/data/$DB_NAME.mdf',
-                   MOVE 'LogicalLogFileName' TO '/var/opt/mssql/data/${DB_NAME}_log.ldf',
-                   REPLACE;
-            "n" >> $GITHUB_PATH
+        echo "/opt/mssql-tools18/bin" >> $GITHUB_PATH
 
     - name: Get logical file names from backup
       run: |
