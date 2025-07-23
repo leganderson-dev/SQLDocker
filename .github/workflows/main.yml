@@ -2,7 +2,7 @@ name: Test SQL Server Locally
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
 
 env:
   DB_USER: sa
