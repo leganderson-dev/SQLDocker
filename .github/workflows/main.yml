@@ -1,13 +1,14 @@
 name: Restore SQL Server Database from Backup
 
 on:
-  workflow_dispatch:
-
+  push:
+    branches:
+    - master
 
 env:
+  DB_USER: sa
   DB_PWD: Redg@te1
   DB_NAME: SSC
-  BACKUP_DIR: SQLBKP
 
 jobs:
   restore-db:
@@ -37,11 +38,11 @@ jobs:
 
     - name: Get logical file names from backup
       run: |
-        /opt/mssql-tools/bin/sqlcmd -S localhost -U $DB_USER -P $DB_PWD -Q "RESTORE FILELISTONLY FROM DISK = N'/var/opt/mssql/backups/SSC.bak'"
+        docker exec sqlserver /opt/mssql-tools/bin/sqlcmd -S localhost -U $DB_USER -P $DB_PWD -Q "RESTORE FILELISTONLY FROM DISK = N'/var/opt/mssql/backups/SSC.bak'"
 
     - name: Restore database
       run: |
-        /opt/mssql-tools/bin/sqlcmd -S localhost -U $DB_USER -P $DB_PWD -Q "
+        docker exec sqlserver /opt/mssql-tools/bin/sqlcmd -S localhost -U $DB_USER -P $DB_PWD -Q "
           RESTORE DATABASE [$DB_NAME] FROM DISK = N'/var/opt/mssql/backups/SSC.bak'
           WITH MOVE 'LogicalDataFileName' TO '/var/opt/mssql/data/$DB_NAME.mdf',
                MOVE 'LogicalLogFileName' TO '/var/opt/mssql/data/${DB_NAME}_log.ldf',
