@@ -1,17 +1,17 @@
-name: Test SQL Server Locally
+name: Restore SQL Server Database from Backup
 
 on:
-  push:
-    branches: [ master ]
+  workflow_dispatch:
+
 
 env:
   DB_USER: sa
   DB_PWD: Redg@te1
-  DB_HOST: localhost
-  DB_PORT: 1433
+  DB_NAME: SSC_Prod
+  BACKUP_DIR: SQLBKP
 
 jobs:
-  test-db:
+  restore-db:
     runs-on: ubuntu-latest
 
     services:
@@ -24,18 +24,27 @@ jobs:
         - 1433:1433
         options: >-
           --health-cmd "exit 0" --health-interval 10s --health-timeout 5s --health-retries 10
+        volumes:
+        - ${{ github.workspace }}/${{ env.BACKUP_DIR }}:/var/opt/mssql/backups
 
     steps:
-    - name: Checkout code
+    - name: Checkout master branch
       uses: actions/checkout@v4
+      with:
+        ref: master
 
     - name: Wait for SQL Server to be ready
       run: sleep 20
 
-    - name: Set DB connection string
+    - name: Get logical file names from backup
       run: |
-        echo "DB_URL=jdbc:sqlserver://${{ env.DB_HOST }}:${{ env.DB_PORT }};user=${{ env.DB_USER }};password=${{ env.DB_PWD }};" >> $GITHUB_ENV
+        /opt/mssql-tools/bin/sqlcmd -S localhost -U $DB_USER -P $DB_PWD -Q "RESTORE FILELISTONLY FROM DISK = N'/var/opt/mssql/backups/SSC.bak'"
 
-    - name: Print DB connection string
+    - name: Restore database
       run: |
-        echo "Connection string: $DB_URL"
+        /opt/mssql-tools/bin/sqlcmd -S localhost -U $DB_USER -P $DB_PWD -Q "
+          RESTORE DATABASE [$DB_NAME] FROM DISK = N'/var/opt/mssql/backups/SSC.bak'
+          WITH MOVE 'LogicalDataFileName' TO '/var/opt/mssql/data/$DB_NAME.mdf',
+               MOVE 'LogicalLogFileName' TO '/var/opt/mssql/data/${DB_NAME}_log.ldf',
+               REPLACE;
+        "
