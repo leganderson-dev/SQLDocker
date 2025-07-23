@@ -5,9 +5,8 @@ on:
 
 
 env:
-  DB_USER: sa
   DB_PWD: Redg@te1
-  DB_NAME: SSC_Prod
+  DB_NAME: SSC
   BACKUP_DIR: SQLBKP
 
 jobs:
@@ -25,7 +24,7 @@ jobs:
         options: >-
           --health-cmd "exit 0" --health-interval 10s --health-timeout 5s --health-retries 10
         volumes:
-        - ${{ github.workspace }}/${{ env.BACKUP_DIR }}:/var/opt/mssql/backups
+        - ${{ github.workspace }}/SQLBKP:/var/opt/mssql/backups
 
     steps:
     - name: Checkout master branch
