@@ -8,16 +8,25 @@ on:
 env:
   FLYWAY_IMAGE: redgate/flyway:latest
 
+  # SQL connection values
+  FLYWAY_HOST: andersonmanagedinstance.public.a1e629225940.database.windows.net
+  FLYWAY_PORT: 3342
+  FLYWAY_DATABASE: SSC_Prod
+  FLYWAY_ENCRYPT: false
+  FLYWAY_TRUST_CERT: true
+  FLYWAY_USER: redgate
+  FLYWAY_PASSWORD: Redg@te123456789
+
 jobs:
   flyway-info:
     runs-on: ubuntu-latest
-    name: Run Flyway Info with Config and Script Mounts
+    name: Run Flyway Info with Mounted Repo Files
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: List repository contents
+    - name: List repo contents (debug)
       run: ls -la "${{ github.workspace }}"
 
     - name: Create reports directory
@@ -29,4 +38,8 @@ jobs:
           -v "${{ github.workspace }}/migrations:/flyway/sql" \
           -v "${{ github.workspace }}:/flyway/conf:ro" \
           -v "${{ github.workspace }}/reports:/flyway/reports" \
-          ${FLYWAY_IMAGE} info
+          ${FLYWAY_IMAGE} \
+          -url="jdbc:sqlserver://${FLYWAY_HOST}:${FLYWAY_PORT};databaseName=${FLYWAY_DATABASE};encrypt=${FLYWAY_ENCRYPT};trustServerCertificate=${FLYWAY_TRUST_CERT}" \
+          -user="${FLYWAY_USER}" \
+          -password="${FLYWAY_PASSWORD}" \
+          info
