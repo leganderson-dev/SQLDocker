@@ -34,7 +34,7 @@ jobs:
           -v "${{ github.workspace }}/schema-model:/flyway/schema-model" \
           -v "${{ github.workspace }}/reports:/flyway/reports" \
           ${FLYWAY_IMAGE} \
-          -url="jdbc:sqlserver://yourhost:3342;databaseName=${FLYWAY_DATABASE};encrypt=false;trustServerCertificate=true" \
+          -url="jdbc:sqlserver://${FLYWAY_HOST}:${FLYWAY_PORT};databaseName=${FLYWAY_DATABASE};encrypt=${FLYWAY_ENCRYPT};trustServerCertificate=${FLYWAY_TRUST_CERT}" \
           -user="${FLYWAY_USER}" \
           -password="${FLYWAY_PASSWORD}" \
           -locations="filesystem:/flyway/sql" \
@@ -46,7 +46,6 @@ jobs:
             -schemaModelLocation=schema-model \
             -environment=${DEPLOY_ENVIRONMENT} \
             -check.buildEnvironment=Check \
-            -check.provisioner=clean \
             -reportFilename=reports/check-report-${DEPLOY_ENVIRONMENT}-${{ github.run_number }}.html
 
     - name: Upload Flyway Check Report
