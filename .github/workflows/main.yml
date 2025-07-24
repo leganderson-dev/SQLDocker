@@ -20,7 +20,6 @@ env:
   # Redgate authentication
   FLYWAY_EMAIL: anderson.rangel@red-gate.com
   FLYWAY_TOKEN: iaDF3IS+rC5+U6mfk5MY62cH6KyDWWwktQCQUXZqOLIzBVi2WAfEFIYTRzq8zkMst0xyCli7L++Kw5RXdin/Uw== ##${{ secrets.FLYWAY_TOKEN }}
-  FLYWAY_LICENSE_KEY: ${{ secrets.FLYWAY_LICENSE_KEY }}
 
 jobs:
   flyway-info:
@@ -44,8 +43,7 @@ jobs:
           ${FLYWAY_IMAGE} \
           -email="${FLYWAY_EMAIL}" \
           -token="${FLYWAY_TOKEN}" \
-          -licenseKey="${FLYWAY_LICENSE_KEY}" \
-          auth
+          auth -IAgreeToTheEula
 
     - name: Run Flyway Info
       run: |
