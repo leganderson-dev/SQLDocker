@@ -119,5 +119,5 @@ ignoreWithElementOrder = true
 ignoreWithEncryption = false
 ignoreWithNoCheck = true
 
-[environments.QA]
-url = "jdbc:sqlserver://localhost;authentication=sqlPassword;databaseName=SQLDocker_QA;encrypt=true;trustServerCertificate=true"
+[environments.Prod]
+url = "jdbc:sqlserver://andersonmanagedinstance.public.a1e629225940.database.windows.net:3342;authentication=sqlPassword;databaseName=SSC_Prod;encrypt=true;trustServerCertificate=true"
