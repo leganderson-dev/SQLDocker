@@ -24,4 +24,4 @@ jobs:
           -e FLYWAY_URL="${FLYWAY_URL}" \
           -e FLYWAY_USER="${FLYWAY_USER}" \
           -e FLYWAY_PASSWORD="${FLYWAY_PASSWORD}" \
-          info
+          redgate/flyway:latest info
