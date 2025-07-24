@@ -18,9 +18,8 @@ env:
   FLYWAY_PASSWORD: Redg@te123456789
 
   # Redgate authentication
-  FLYWAY_EMAIL: anderson.rangel@red-gate.com
-  FLYWAY_TOKEN: ${{ secrets.FLYWAY_TOKEN }}
-  AUTH: 'auth -IAgreeToTheEula'
+  EMAIL: anderson.rangel@red-gate.com
+  TOKEN: iaDF3IS+rC5+U6mfk5MY62cH6KyDWWwktQCQUXZqOLIzBVi2WAfEFIYTRzq8zkMst0xyCli7L++Kw5RXdin/Uw==
 
 jobs:
   flyway-info:
@@ -44,8 +43,6 @@ jobs:
           -v "${{ github.workspace }}:/flyway/conf:ro" \
           -v "${{ github.workspace }}/reports:/flyway/reports" \
           ${FLYWAY_IMAGE} \
-          -email="${FLYWAY_EMAIL}" \
-          -token="${FLYWAY_TOKEN}" \
           -url="jdbc:sqlserver://${FLYWAY_HOST}:${FLYWAY_PORT};databaseName=${FLYWAY_DATABASE};encrypt=${FLYWAY_ENCRYPT};trustServerCertificate=${FLYWAY_TRUST_CERT}" \
           -user="${FLYWAY_USER}" \
           -password="${FLYWAY_PASSWORD}" \
