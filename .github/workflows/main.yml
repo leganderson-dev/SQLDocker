@@ -19,7 +19,8 @@ env:
 
   # Redgate authentication
   FLYWAY_EMAIL: anderson.rangel@red-gate.com
-  FLYWAY_TOKEN: iaDF3IS+rC5+U6mfk5MY62cH6KyDWWwktQCQUXZqOLIzBVi2WAfEFIYTRzq8zkMst0xyCli7L++Kw5RXdin/Uw== ##${{ secrets.FLYWAY_TOKEN }}
+  FLYWAY_TOKEN: ${{ secrets.FLYWAY_TOKEN }}
+  AUTH: 'auth -IAgreeToTheEula'
 
 jobs:
   flyway-info:
@@ -36,24 +37,18 @@ jobs:
     - name: Create reports directory
       run: mkdir -p "${{ github.workspace }}/reports"
 
-    - name: Authenticate with Redgate
-      run: |
-        docker run --rm \
-          -v "${{ github.workspace }}:/flyway/conf:ro" \
-          ${FLYWAY_IMAGE} \
-          -email="${FLYWAY_EMAIL}" \
-          -token="${FLYWAY_TOKEN}" \
-          auth -IAgreeToTheEula
-
-    - name: Run Flyway Info
+    - name: Run Flyway Info (with auth inline)
       run: |
         docker run --rm \
           -v "${{ github.workspace }}/migrations:/flyway/sql" \
           -v "${{ github.workspace }}:/flyway/conf:ro" \
           -v "${{ github.workspace }}/reports:/flyway/reports" \
           ${FLYWAY_IMAGE} \
+          -email="${FLYWAY_EMAIL}" \
+          -token="${FLYWAY_TOKEN}" \
           -url="jdbc:sqlserver://${FLYWAY_HOST}:${FLYWAY_PORT};databaseName=${FLYWAY_DATABASE};encrypt=${FLYWAY_ENCRYPT};trustServerCertificate=${FLYWAY_TRUST_CERT}" \
           -user="${FLYWAY_USER}" \
           -password="${FLYWAY_PASSWORD}" \
           -locations="filesystem:/flyway/sql" \
+          $AUTH \
           info

@@ -9,13 +9,13 @@ mixed = true
 outOfOrder = true
 schemaModelLocation = "schema-model"
 validateMigrationNaming = true
-baselineVersion = "001_20240918150999"
+baselineVersion = "001.20250204213912"
 baselineOnMigrate = true
 
   [flyway.check]
   majorTolerance = 0
 
-[flyway.plugins.clean]
+[sqlserver.clean.mode]
 mode = "all"
 
 [flywayDesktop]
