@@ -49,7 +49,7 @@ jobs:
           check -changes \
             -workingDirectory=/flyway \
             -schemaModelLocation=schema-model \
-            -environment=Prod \
+            -environment=${DEPLOY_ENVIRONMENT} \
             -check.buildEnvironment=Check \
             -reportFilename=reports/check-report.html
 
