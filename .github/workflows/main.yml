@@ -48,3 +48,4 @@ jobs:
           -password="${FLYWAY_PASSWORD}" \
           -locations="filesystem:/flyway/sql" \
           info
+          auth -IAgreeToTheEula
