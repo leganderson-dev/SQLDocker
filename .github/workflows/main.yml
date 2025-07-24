@@ -9,6 +9,9 @@ env:
   FLYWAY_TOKEN: iaDF3IS+rC5+U6mfk5MY62cH6KyDWWwktQCQUXZqOLIzBVi2WAfEFIYTRzq8zkMst0xyCli7L++Kw5RXdin/Uw==
   FLYWAY_IMAGE: redgate/flyway:latest
 
+  FLYWAY_ENCRYPT: true
+  FLYWAY_TRUST_CERT: true
+
 jobs:
   flyway-Prod:
     runs-on: ubuntu-latest
