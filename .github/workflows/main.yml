@@ -9,6 +9,8 @@ env:
   FLYWAY_TOKEN: iaDF3IS+rC5+U6mfk5MY62cH6KyDWWwktQCQUXZqOLIzBVi2WAfEFIYTRzq8zkMst0xyCli7L++Kw5RXdin/Uw==
   FLYWAY_IMAGE: redgate/flyway:latest
 
+  FLYWAY_HOST: andersonmanagedinstance.public.a1e629225940.database.windows.net
+  FLYWAY_PORT: 3342
   FLYWAY_ENCRYPT: true
   FLYWAY_TRUST_CERT: true
 
