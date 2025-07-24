@@ -58,6 +58,23 @@ jobs:
       with:
         name: flyway-check-${{ env.DEPLOY_ENVIRONMENT }}-${{ github.run_number }}
         path: "${{ github.workspace }}/reports/check-report-${{ env.DEPLOY_ENVIRONMENT }}-${{ github.run_number }}.html"
+
+    - name: Run Flyway Migrate Phase (Prod)
+      run: |+
+        docker run --rm \
+          -v "${{ github.workspace }}/migrations:/flyway/sql" \
+          -v "${{ github.workspace }}:/flyway/conf:ro" \
+          -v "${{ github.workspace }}/reports:/flyway/reports" \
+          ${FLYWAY_IMAGE} \
+          -url="jdbc:sqlserver://${FLYWAY_HOST}:${FLYWAY_PORT};databaseName=${FLYWAY_DATABASE};encrypt=${FLYWAY_ENCRYPT};trustServerCertificate=${FLYWAY_TRUST_CERT}" \
+          -user="${FLYWAY_USER}" \
+          -password="${FLYWAY_PASSWORD}" \
+          -locations="filesystem:/flyway/sql" \
+          -email="${FLYWAY_EMAIL}" \
+          -token="${FLYWAY_TOKEN}" \
+          auth -IAgreeToTheEula \
+          info migrate info
+          
   # Copy this job for QA, Prod, etc., changing only:
   # - name
   # - DEPLOY_ENVIRONMENT
