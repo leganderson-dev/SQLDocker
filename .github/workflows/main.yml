@@ -1,42 +1,32 @@
-name: Flyway Check and Migrate Against Azure SQL Managed Instance
+name: Flyway Check and Migrate Pipeline
 
 on:
   push:
     branches:
-    - master
-
+    - main
 env:
-  FLYWAY_IMAGE: redgate/flyway:latest
-
-  # SQL connection details
-  FLYWAY_HOST: andersonmanagedinstance.public.a1e629225940.database.windows.net
-  FLYWAY_PORT: 3342
-  FLYWAY_DATABASE: SSC_Prod
-  FLYWAY_ENCRYPT: false
-  FLYWAY_TRUST_CERT: true
-  FLYWAY_USER: redgate
-  FLYWAY_PASSWORD: Redg@te123456789
-
-  # Redgate authentication
   FLYWAY_EMAIL: anderson.rangel@red-gate.com
   FLYWAY_TOKEN: iaDF3IS+rC5+U6mfk5MY62cH6KyDWWwktQCQUXZqOLIzBVi2WAfEFIYTRzq8zkMst0xyCli7L++Kw5RXdin/Uw==
+  FLYWAY_IMAGE: redgate/flyway:latest
 
 jobs:
-  flyway-check-and-migrate:
+  flyway-Prod:
     runs-on: ubuntu-latest
-    name: Run Flyway Check and Migrate
+    name: Prod Environment
+    env:
+      DEPLOY_ENVIRONMENT: Prod
+      FLYWAY_DATABASE: SSC_Prod
+      FLYWAY_USER: redgate
+      FLYWAY_PASSWORD: Redg@te123456789
 
     steps:
-    - name: Checkout repository
+    - name: Checkout
       uses: actions/checkout@v4
 
-    - name: List repo contents (debug)
-      run: ls -la "${{ github.workspace }}"
-
-    - name: Create reports directory
+    - name: Prepare reports
       run: mkdir -p "${{ github.workspace }}/reports"
 
-    - name: Run Flyway Check
+    - name: Run Flyway Check (Prod)
       run: |
         docker run --rm \
           -v "${{ github.workspace }}/migrations:/flyway/sql" \
@@ -44,7 +34,7 @@ jobs:
           -v "${{ github.workspace }}/schema-model:/flyway/schema-model" \
           -v "${{ github.workspace }}/reports:/flyway/reports" \
           ${FLYWAY_IMAGE} \
-          -url="jdbc:sqlserver://${FLYWAY_HOST}:${FLYWAY_PORT};databaseName=${FLYWAY_DATABASE};encrypt=${FLYWAY_ENCRYPT};trustServerCertificate=${FLYWAY_TRUST_CERT}" \
+          -url="jdbc:sqlserver://yourhost:3342;databaseName=${FLYWAY_DATABASE};encrypt=false;trustServerCertificate=true" \
           -user="${FLYWAY_USER}" \
           -password="${FLYWAY_PASSWORD}" \
           -locations="filesystem:/flyway/sql" \
@@ -54,22 +44,18 @@ jobs:
           check -changes \
             -workingDirectory=/flyway \
             -schemaModelLocation=schema-model \
-            -environment=Prod \
+            -environment=${DEPLOY_ENVIRONMENT} \
             -check.buildEnvironment=Check \
-            -reportFilename=reports/check-report.html
+            -check.provisioner=clean \
+            -reportFilename=reports/check-report-${DEPLOY_ENVIRONMENT}-${{ github.run_number }}.html
 
-    - name: Run Flyway Migrate
-      run: |
-        docker run --rm \
-          -v "${{ github.workspace }}/migrations:/flyway/sql" \
-          -v "${{ github.workspace }}:/flyway/conf:ro" \
-          -v "${{ github.workspace }}/reports:/flyway/reports" \
-          ${FLYWAY_IMAGE} \
-          -url="jdbc:sqlserver://${FLYWAY_HOST}:${FLYWAY_PORT};databaseName=${FLYWAY_DATABASE};encrypt=${FLYWAY_ENCRYPT};trustServerCertificate=${FLYWAY_TRUST_CERT}" \
-          -user="${FLYWAY_USER}" \
-          -password="${FLYWAY_PASSWORD}" \
-          -locations="filesystem:/flyway/sql" \
-          -email="${FLYWAY_EMAIL}" \
-          -token="${FLYWAY_TOKEN}" \
-          auth -IAgreeToTheEula \
-          migrate info
+    - name: Upload Flyway Check Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: flyway-check-${{ env.DEPLOY_ENVIRONMENT }}-${{ github.run_number }}
+        path: "${{ github.workspace }}/reports/check-report-${{ env.DEPLOY_ENVIRONMENT }}-${{ github.run_number }}.html"
+  # Copy this job for QA, Prod, etc., changing only:
+  # - name
+  # - DEPLOY_ENVIRONMENT
+  # - FLYWAY_DATABASE
+  # Optionally use a matrix if steps are fully shared
