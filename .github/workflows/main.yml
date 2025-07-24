@@ -51,7 +51,7 @@ jobs:
             -schemaModelLocation=schema-model \
             -environment=${DEPLOY_ENVIRONMENT} \
             -check.buildEnvironment=Check \
-            -reportFilename=reports/check-report.html
+            -reportFilename=reports/check-report-${{ env.DEPLOY_ENVIRONMENT }}-${{ github.run_number }}.html
 
     - name: Upload Flyway Check Report
       uses: actions/upload-artifact@v4
