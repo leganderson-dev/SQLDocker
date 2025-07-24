@@ -58,5 +58,5 @@ jobs:
           -locations="filesystem:/flyway/sql" \
           -email="${FLYWAY_EMAIL}" \
           -token="${FLYWAY_TOKEN}" \
-          auth -IAgreeToTheEula
+          auth -IAgreeToTheEula \
           info
