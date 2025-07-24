@@ -29,28 +29,6 @@ filterFile = "filter.rgf"
   [redgateCompare.sqlserver]
   filterFile = "Filter.scpf"
 
-[redgateCompare.sqlserver.data.options.comparison]
-compressTemporaryFiles = false
-forceBinaryCollation = false
-treatEmptyStringAsNull = false
-trimTrailingWhiteSpace = false
-useChecksumComparison = false
-useMaxPrecisionForFloatComparison = false
-
-[redgateCompare.sqlserver.data.options.deployment]
-disableDdlTriggers = true
-disableDmlTriggers = false
-disableForeignKeys = false
-dontIncludeCommentsInScript = false
-dropPrimaryKeysIndexesAndUniqueConstraints = false
-reseedIdentityColumns = false
-skipIntegrityChecksForForeignKeys = false
-transportClrDataTypesAsBinary = false
-
-[redgateCompare.sqlserver.data.options.mapping]
-includeTimestampColumns = false
-useCaseSensitiveObjectDefinition = true
-
 [redgateCompare.sqlserver.options.behavior]
 addCreateOrAlterForRerunnableScripts = false
 addDropAndCreateForRerunnableScripts = false
@@ -87,14 +65,14 @@ ignoreDatabaseAndServerNameInSynonyms = true
 ignoreDmlTriggers = false
 ignoreDynamicDataMasking = false
 ignoreEventNotificationsOnQueues = false
-ignoreExtendedProperties = false
+ignoreExtendedProperties = true
 ignoreFileGroupsPartitionSchemesAndPartitionFunctions = true
 ignoreFillFactorAndIndexPadding = true
 ignoreFullTextIndexing = false
 ignoreIdentitySeedAndIncrementValues = false
 ignoreIndexes = false
 ignoreInsteadOfTriggers = false
-ignoreInternallyUsedMicrosoftExtendedProperties = false
+ignoreInternallyUsedMicrosoftExtendedProperties = true
 ignoreLockPropertiesOfIndexes = false
 ignoreNocheckAndWithNocheck = false
 ignoreNotForReplication = true
@@ -119,9 +97,30 @@ ignoreWithElementOrder = true
 ignoreWithEncryption = false
 ignoreWithNoCheck = true
 
+[redgateCompare.sqlserver.data.options.mapping]
+includeTimestampColumns = false
+useCaseSensitiveObjectDefinition = true
+
+[redgateCompare.sqlserver.data.options.comparison]
+compressTemporaryFiles = false
+forceBinaryCollation = false
+treatEmptyStringAsNull = false
+trimTrailingWhiteSpace = false
+useChecksumComparison = false
+useMaxPrecisionForFloatComparison = false
+
+[redgateCompare.sqlserver.data.options.deployment]
+disableDdlTriggers = true
+disableDmlTriggers = false
+disableForeignKeys = false
+dontIncludeCommentsInScript = false
+dropPrimaryKeysIndexesAndUniqueConstraints = false
+reseedIdentityColumns = false
+skipIntegrityChecksForForeignKeys = false
+transportClrDataTypesAsBinary = false
+
 [environments.Prod]
 url = "jdbc:sqlserver://andersonmanagedinstance.public.a1e629225940.database.windows.net:3342;authentication=sqlPassword;databaseName=SSC_Prod;encrypt=true;trustServerCertificate=true"
-
 
 [environments.Check]
 url = "jdbc:sqlserver://andersonmanagedinstance.public.a1e629225940.database.windows.net:3342;authentication=sqlPassword;databaseName=SSC_Check;encrypt=false;trustServerCertificate=true"

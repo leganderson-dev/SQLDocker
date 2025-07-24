@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<NamedFilter version="1" type="SQLCompareFilter">
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<NamedFilter type="SQLCompareFilter" version="1">
   <FilterName>Filter</FilterName>
-  <Filter version="1" type="DifferenceFilter">
+  <Filter type="DifferenceFilter" version="1">
     <FilterCaseSensitive>False</FilterCaseSensitive>
     <Filters version="1">
       <None version="1">
@@ -117,12 +117,12 @@
         <Expression>TRUE</Expression>
       </Synonym>
       <Table version="1">
-        <Include>True</Include>
-        <Expression>TRUE</Expression>
+        <Include>False</Include>
+        <Expression>((@SCHEMA = '' AND @NAME LIKE 'DMSSTAT%'))</Expression>
       </Table>
       <User version="1">
         <Include>True</Include>
-        <Expression />
+        <Expression/>
       </User>
       <UserDefinedType version="1">
         <Include>True</Include>
