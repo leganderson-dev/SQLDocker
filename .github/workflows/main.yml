@@ -33,17 +33,6 @@ jobs:
       with:
         ref: master
 
-    - name: Wait for SQL Server to start
-      run: sleep 60
-
-    - name: Wait for SQL Server to accept connections
-      run: |
-        for i in {1..30}; do
-          /opt/mssql-tools18/bin/sqlcmd -S "localhost;Encrypt=no" -U $DB_USER -P $DB_PWD -Q "SELECT 1" && break
-          echo "Waiting for SQL Server to be available..."
-          sleep 2
-        done
-
     - name: Install sqlcmd tools
       run: |
         curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
@@ -51,6 +40,17 @@ jobs:
         sudo apt-get update
         sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18 mssql-tools18 unixodbc-dev
         echo "/opt/mssql-tools18/bin" >> $GITHUB_PATH
+
+    - name: Wait for SQL Server to start
+      run: sleep 60
+
+    - name: Wait for SQL Server to accept connections
+      run: |
+        for i in {1..30}; do
+          sqlcmd -S "localhost;Encrypt=no" -U $DB_USER -P $DB_PWD -Q "SELECT 1" && break
+          echo "Waiting for SQL Server to be available..."
+          sleep 2
+        done
 
     - name: Get logical file names from backup
       run: |
