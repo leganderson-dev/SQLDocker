@@ -12,7 +12,7 @@
   <IsAzure>False</IsAzure>
   <ScriptFolderType>Default</ScriptFolderType>
   <MaxDataFileSize>10485760</MaxDataFileSize>
-  <ProjectGuid>681834bf-127b-43eb-85ed-0d09a5133268</ProjectGuid>
+  <ProjectGuid>d88f91e8-bddf-4e93-853b-6ef03f93041b</ProjectGuid>
   <WriteToFileOptions>
     <Prefixes>
       <None>
@@ -65,6 +65,8 @@
     <DataWriteAllFilesInOneDirectory>True</DataWriteAllFilesInOneDirectory>
   </WriteToFileOptions>
   <DataFileSet>
-    <Count>0</Count>
+    <Count>2</Count>
+    <DataFile>dbo.CountryCodes_Data.sql</DataFile>
+    <DataFile>dbo.RSSFeeds_Data.sql</DataFile>
   </DataFileSet>
 </DatabaseInformation>

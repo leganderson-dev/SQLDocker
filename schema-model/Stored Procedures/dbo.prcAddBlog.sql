@@ -15,7 +15,7 @@ SET NOCOUNT ON
         
         
 END;
---V9
+--V5
 GO
 EXEC sp_addextendedproperty N'MS_Description', N'Procedure to add a new blog post to Simple Talk', 'SCHEMA', N'dbo', 'PROCEDURE', N'prcAddBlog', NULL, NULL
 GO
