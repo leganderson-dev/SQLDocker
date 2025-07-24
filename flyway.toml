@@ -23,6 +23,9 @@ developmentEnvironment = "development"
 schemaModel = "schema-model"
 shadowEnvironment = "shadow"
 
+  [flywayDesktop.generate]
+  undoScripts = true
+
 [redgateCompare]
 filterFile = "filter.rgf"
 

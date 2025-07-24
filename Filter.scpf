@@ -118,7 +118,7 @@
       </Synonym>
       <Table version="1">
         <Include>False</Include>
-        <Expression>((@SCHEMA = '' AND @NAME LIKE 'DMSSTAT%'))</Expression>
+        <Expression>(@NAME LIKE 'DMSSTAT%')</Expression>
       </Table>
       <User version="1">
         <Include>True</Include>

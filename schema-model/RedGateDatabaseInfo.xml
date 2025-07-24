@@ -5,14 +5,14 @@
   <DefaultSchema>dbo</DefaultSchema>
   <DefaultUser>dbo</DefaultUser>
   <DefaultFilegroup>PRIMARY</DefaultFilegroup>
-  <DatabaseVersion>16</DatabaseVersion>
-  <ServerVersion>16.0</ServerVersion>
-  <CompatibilityLevel>160</CompatibilityLevel>
-  <EngineEdition>Enterprise</EngineEdition>
+  <DatabaseVersion>15</DatabaseVersion>
+  <ServerVersion>12.0</ServerVersion>
+  <CompatibilityLevel>150</CompatibilityLevel>
+  <EngineEdition>AzureManagedInstance</EngineEdition>
   <IsAzure>False</IsAzure>
   <ScriptFolderType>Default</ScriptFolderType>
   <MaxDataFileSize>10485760</MaxDataFileSize>
-  <ProjectGuid>d88f91e8-bddf-4e93-853b-6ef03f93041b</ProjectGuid>
+  <ProjectGuid>681834bf-127b-43eb-85ed-0d09a5133268</ProjectGuid>
   <WriteToFileOptions>
     <Prefixes>
       <None>
