@@ -1,4 +1,4 @@
-name: Flyway Info Against Azure SQL Managed Instance
+name: Flyway Check and Migrate Against Azure SQL Managed Instance
 
 on:
   push:
@@ -19,13 +19,12 @@ env:
 
   # Redgate authentication
   FLYWAY_EMAIL: anderson.rangel@red-gate.com
-  FLYWAY_TOKEN: iaDF3IS+rC5+U6mfk5MY62cH6KyDWWwktQCQUXZqOLIzBVi2WAfEFIYTRzq8zkMst0xyCli7L++Kw5RXdin/Uw== ##${{ secrets.FLYWAY_TOKEN }}
-  FLYWAY_AUTH: '-email="${FLYWAY_EMAIL}" -token="${FLYWAY_TOKEN}" auth -IAgreeToTheEula'
+  FLYWAY_TOKEN: ${{ secrets.FLYWAY_TOKEN }}
 
 jobs:
-  flyway-info:
+  flyway-check-and-migrate:
     runs-on: ubuntu-latest
-    name: Authenticate and Run Flyway Info
+    name: Run Flyway Check and Migrate
 
     steps:
     - name: Checkout repository
@@ -36,6 +35,28 @@ jobs:
 
     - name: Create reports directory
       run: mkdir -p "${{ github.workspace }}/reports"
+
+    - name: Run Flyway Check
+      run: |
+        docker run --rm \
+          -v "${{ github.workspace }}/migrations:/flyway/sql" \
+          -v "${{ github.workspace }}:/flyway/conf:ro" \
+          -v "${{ github.workspace }}/schema-model:/flyway/schema-model" \
+          -v "${{ github.workspace }}/reports:/flyway/reports" \
+          ${FLYWAY_IMAGE} \
+          -url="jdbc:sqlserver://${FLYWAY_HOST}:${FLYWAY_PORT};databaseName=${FLYWAY_DATABASE};encrypt=${FLYWAY_ENCRYPT};trustServerCertificate=${FLYWAY_TRUST_CERT}" \
+          -user="${FLYWAY_USER}" \
+          -password="${FLYWAY_PASSWORD}" \
+          -locations="filesystem:/flyway/sql" \
+          -email="${FLYWAY_EMAIL}" \
+          -token="${FLYWAY_TOKEN}" \
+          auth -IAgreeToTheEula \
+          check -changes -drift -code -dryrun \
+            -workingDirectory=/flyway \
+            -schemaModelLocation=schema-model \
+            -environment=Prod \
+            -check.buildEnvironment=Check \
+            -reportFilename=reports/check-report.html
 
     - name: Run Flyway Migrate
       run: |
@@ -51,4 +72,4 @@ jobs:
           -email="${FLYWAY_EMAIL}" \
           -token="${FLYWAY_TOKEN}" \
           auth -IAgreeToTheEula \
-          info migrate info
+          migrate info
