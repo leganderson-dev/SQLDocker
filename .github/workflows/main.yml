@@ -44,7 +44,6 @@ jobs:
           check -changes \
             -workingDirectory=/flyway \
             -schemaModelLocation=schema-model \
-            -environment=${DEPLOY_ENVIRONMENT} \
             -check.buildEnvironment=Check \
             -reportFilename=reports/check-report-${DEPLOY_ENVIRONMENT}-${{ github.run_number }}.html
 
