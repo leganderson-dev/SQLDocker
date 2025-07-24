@@ -6,29 +6,27 @@ on:
     - master
 
 env:
-  FLYWAY_HOST: andersonmanagedinstance.public.a1e629225940.database.windows.net
-  FLYWAY_PORT: 3342
-  FLYWAY_DATABASE: SSC_Prod
-  FLYWAY_ENCRYPT: false
-  FLYWAY_TRUST_CERT: true
-  FLYWAY_HOSTNAME_IN_CERT: a1e629225940.database.windows.net
-  FLYWAY_USER: redgate
-  FLYWAY_PASSWORD: Redg@te123456789
+  FLYWAY_IMAGE: redgate/flyway:latest
 
 jobs:
   flyway-info:
     runs-on: ubuntu-latest
+    name: Run Flyway Info with Config and Script Mounts
 
     steps:
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v4
+
+    - name: List repository contents
+      run: ls -la "${{ github.workspace }}"
+
+    - name: Create reports directory
+      run: mkdir -p "${{ github.workspace }}/reports"
 
     - name: Run Flyway Info
       run: |
-        export FLYWAY_URL="jdbc:sqlserver://${FLYWAY_HOST}:${FLYWAY_PORT};databaseName=${FLYWAY_DATABASE};encrypt=${FLYWAY_ENCRYPT};trustServerCertificate=${FLYWAY_TRUST_CERT}"
-
         docker run --rm \
-          -e FLYWAY_URL="${FLYWAY_URL}" \
-          -e FLYWAY_USER="${FLYWAY_USER}" \
-          -e FLYWAY_PASSWORD="${FLYWAY_PASSWORD}" \
-          redgate/flyway:latest info
+          -v "${{ github.workspace }}/migrations:/flyway/sql" \
+          -v "${{ github.workspace }}:/flyway/conf:ro" \
+          -v "${{ github.workspace }}/reports:/flyway/reports" \
+          ${FLYWAY_IMAGE} info
