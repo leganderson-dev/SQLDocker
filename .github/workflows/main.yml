@@ -47,5 +47,4 @@ jobs:
           -user="${FLYWAY_USER}" \
           -password="${FLYWAY_PASSWORD}" \
           -locations="filesystem:/flyway/sql" \
-          info
           auth -IAgreeToTheEula
