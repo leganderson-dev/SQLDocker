@@ -42,4 +42,5 @@ jobs:
           -url="jdbc:sqlserver://${FLYWAY_HOST}:${FLYWAY_PORT};databaseName=${FLYWAY_DATABASE};encrypt=${FLYWAY_ENCRYPT};trustServerCertificate=${FLYWAY_TRUST_CERT}" \
           -user="${FLYWAY_USER}" \
           -password="${FLYWAY_PASSWORD}" \
+          -locations="filesystem:/flyway/sql" \
           info
