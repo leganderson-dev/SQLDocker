@@ -8,7 +8,7 @@ on:
 env:
   FLYWAY_IMAGE: redgate/flyway:latest
 
-  # SQL connection values
+  # SQL connection details
   FLYWAY_HOST: andersonmanagedinstance.public.a1e629225940.database.windows.net
   FLYWAY_PORT: 3342
   FLYWAY_DATABASE: SSC_Prod
@@ -17,10 +17,15 @@ env:
   FLYWAY_USER: redgate
   FLYWAY_PASSWORD: Redg@te123456789
 
+  # Redgate authentication
+  FLYWAY_EMAIL: anderson.rangel@red-gate.com
+  FLYWAY_TOKEN: iaDF3IS+rC5+U6mfk5MY62cH6KyDWWwktQCQUXZqOLIzBVi2WAfEFIYTRzq8zkMst0xyCli7L++Kw5RXdin/Uw== ##${{ secrets.FLYWAY_TOKEN }}
+  FLYWAY_LICENSE_KEY: ${{ secrets.FLYWAY_LICENSE_KEY }}
+
 jobs:
   flyway-info:
     runs-on: ubuntu-latest
-    name: Run Flyway Info with Mounted Repo Files
+    name: Authenticate and Run Flyway Info
 
     steps:
     - name: Checkout repository
@@ -31,6 +36,16 @@ jobs:
 
     - name: Create reports directory
       run: mkdir -p "${{ github.workspace }}/reports"
+
+    - name: Authenticate with Redgate
+      run: |
+        docker run --rm \
+          -v "${{ github.workspace }}:/flyway/conf:ro" \
+          ${FLYWAY_IMAGE} \
+          -email="${FLYWAY_EMAIL}" \
+          -token="${FLYWAY_TOKEN}" \
+          -licenseKey="${FLYWAY_LICENSE_KEY}" \
+          auth
 
     - name: Run Flyway Info
       run: |
