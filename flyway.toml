@@ -124,3 +124,4 @@ url = "jdbc:sqlserver://andersonmanagedinstance.public.a1e629225940.database.win
 
 [environments.Check]
 url = "jdbc:sqlserver://andersonmanagedinstance.public.a1e629225940.database.windows.net:3342;authentication=sqlPassword;databaseName=SSC_Check;encrypt=false;trustServerCertificate=true"
+provisioner = "clean"
