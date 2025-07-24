@@ -51,7 +51,7 @@ jobs:
           -email="${FLYWAY_EMAIL}" \
           -token="${FLYWAY_TOKEN}" \
           auth -IAgreeToTheEula \
-          check -changes
+          check -changes \
             -workingDirectory=/flyway \
             -schemaModelLocation=schema-model \
             -environment=Prod \
