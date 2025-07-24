@@ -48,6 +48,7 @@ jobs:
       run: |
         sqlcmd -S "localhost;Encrypt=no" -U $DB_USER -P $DB_PWD -Q "RESTORE FILELISTONLY FROM DISK = N'/var/opt/mssql/backups/SSC.bak'"
 
+    # IMPORTANT: Update the logical file names below after checking the output of the previous step!
     - name: Restore database
       run: |
         sqlcmd -S "localhost;Encrypt=no" -U $DB_USER -P $DB_PWD -Q "
