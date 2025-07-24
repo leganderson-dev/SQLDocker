@@ -3,7 +3,7 @@ name: Flyway Check and Migrate Pipeline
 on:
   push:
     branches:
-    - main
+    - master
 env:
   FLYWAY_EMAIL: anderson.rangel@red-gate.com
   FLYWAY_TOKEN: iaDF3IS+rC5+U6mfk5MY62cH6KyDWWwktQCQUXZqOLIzBVi2WAfEFIYTRzq8zkMst0xyCli7L++Kw5RXdin/Uw==
