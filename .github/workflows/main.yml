@@ -26,7 +26,7 @@ jobs:
     - name: Prepare reports
       run: mkdir -p "${{ github.workspace }}/reports"
 
-    - name: Run Flyway Check (Prod)
+    - name: Run Flyway Check
       run: |
         docker run --rm \
           -v "${{ github.workspace }}/migrations:/flyway/sql" \
@@ -44,9 +44,9 @@ jobs:
           check -changes \
             -workingDirectory=/flyway \
             -schemaModelLocation=schema-model \
+            -environment=Prod \
             -check.buildEnvironment=Check \
-            -environment=${DEPLOY_ENVIRONMENT} \
-            -reportFilename=reports/check-report-${DEPLOY_ENVIRONMENT}-${{ github.run_number }}.html
+            -reportFilename=reports/check-report.html
 
     - name: Upload Flyway Check Report
       uses: actions/upload-artifact@v4
