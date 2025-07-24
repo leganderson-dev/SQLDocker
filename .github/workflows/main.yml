@@ -45,6 +45,7 @@ jobs:
             -workingDirectory=/flyway \
             -schemaModelLocation=schema-model \
             -check.buildEnvironment=Check \
+            -environment=${DEPLOY_ENVIRONMENT} \
             -reportFilename=reports/check-report-${DEPLOY_ENVIRONMENT}-${{ github.run_number }}.html
 
     - name: Upload Flyway Check Report
