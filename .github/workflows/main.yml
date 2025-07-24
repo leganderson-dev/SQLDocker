@@ -18,8 +18,8 @@ env:
   FLYWAY_PASSWORD: Redg@te123456789
 
   # Redgate authentication
-  EMAIL: anderson.rangel@red-gate.com
-  TOKEN: iaDF3IS+rC5+U6mfk5MY62cH6KyDWWwktQCQUXZqOLIzBVi2WAfEFIYTRzq8zkMst0xyCli7L++Kw5RXdin/Uw==
+  FLYWAY_EMAIL: anderson.rangel@red-gate.com
+  FLYWAY_TOKEN: iaDF3IS+rC5+U6mfk5MY62cH6KyDWWwktQCQUXZqOLIzBVi2WAfEFIYTRzq8zkMst0xyCli7L++Kw5RXdin/Uw== ##${{ secrets.FLYWAY_TOKEN }}
 
 jobs:
   flyway-info:
@@ -36,6 +36,15 @@ jobs:
     - name: Create reports directory
       run: mkdir -p "${{ github.workspace }}/reports"
 
+    - name: Authenticate with Redgate
+      run: |
+        docker run --rm \
+          -v "${{ github.workspace }}:/flyway/conf:ro" \
+          ${FLYWAY_IMAGE} \
+          -email="${FLYWAY_EMAIL}" \
+          -token="${FLYWAY_TOKEN}" \
+          auth -IAgreeToTheEula
+
     - name: Run Flyway Info
       run: |
         docker run --rm \
@@ -47,4 +56,4 @@ jobs:
           -user="${FLYWAY_USER}" \
           -password="${FLYWAY_PASSWORD}" \
           -locations="filesystem:/flyway/sql" \
-          auth -IAgreeToTheEula
+          info
