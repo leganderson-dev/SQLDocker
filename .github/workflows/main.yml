@@ -37,7 +37,7 @@ jobs:
     - name: Create reports directory
       run: mkdir -p "${{ github.workspace }}/reports"
 
-    - name: Run Flyway Info
+    - name: Run Flyway Migrate
       run: |
         docker run --rm \
           -v "${{ github.workspace }}/migrations:/flyway/sql" \
@@ -48,5 +48,7 @@ jobs:
           -user="${FLYWAY_USER}" \
           -password="${FLYWAY_PASSWORD}" \
           -locations="filesystem:/flyway/sql" \
-          $FLYWAY_AUTH \
-          info
+          -email="${FLYWAY_EMAIL}" \
+          -token="${FLYWAY_TOKEN}" \
+          auth -IAgreeToTheEula \
+          info migrate info
