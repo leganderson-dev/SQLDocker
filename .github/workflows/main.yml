@@ -37,7 +37,7 @@ jobs:
     - name: Create reports directory
       run: mkdir -p "${{ github.workspace }}/reports"
 
-    - name: Run Flyway Info (with auth inline)
+    - name: Run Flyway Info
       run: |
         docker run --rm \
           -v "${{ github.workspace }}/migrations:/flyway/sql" \
@@ -50,5 +50,4 @@ jobs:
           -user="${FLYWAY_USER}" \
           -password="${FLYWAY_PASSWORD}" \
           -locations="filesystem:/flyway/sql" \
-          $AUTH \
           info
