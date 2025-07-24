@@ -6,7 +6,12 @@ on:
     - master
 
 env:
-  FLYWAY_URL: jdbc:sqlserver://andersonmanagedinstance.public.a1e629225940.database.windows.net:3342;databaseName=SSC_Prod;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net
+  FLYWAY_HOST: andersonmanagedinstance.public.a1e629225940.database.windows.net
+  FLYWAY_PORT: 3342
+  FLYWAY_DATABASE: SSC_Prod
+  FLYWAY_ENCRYPT: false
+  FLYWAY_TRUST_CERT: true
+  FLYWAY_HOSTNAME_IN_CERT: a1e629225940.database.windows.net
   FLYWAY_USER: redgate
   FLYWAY_PASSWORD: Redg@te123456789
 
@@ -20,6 +25,8 @@ jobs:
 
     - name: Run Flyway Info
       run: |
+        export FLYWAY_URL="jdbc:sqlserver://${FLYWAY_HOST}:${FLYWAY_PORT};databaseName=${FLYWAY_DATABASE};encrypt=${FLYWAY_ENCRYPT};trustServerCertificate=${FLYWAY_TRUST_CERT}"
+
         docker run --rm \
           -e FLYWAY_URL="${FLYWAY_URL}" \
           -e FLYWAY_USER="${FLYWAY_USER}" \
