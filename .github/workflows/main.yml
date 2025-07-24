@@ -1,4 +1,4 @@
-name: Restore SQL Server Database from Backup
+name: Flyway Info Against Azure SQL Managed Instance
 
 on:
   push:
@@ -6,62 +6,21 @@ on:
     - master
 
 env:
-  DB_USER: sa
-  DB_PWD: Redg@te1
-  DB_NAME: SSC
+  FLYWAY_URL: jdbc:sqlserver://andersonmanagedinstance.public.a1e629225940.database.windows.net:3342;databaseName=SSC_Prod;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net
+  FLYWAY_USER: redgate
+  FLYWAY_PASSWORD: Redg@te123456789
 
 jobs:
-  restore-db:
+  flyway-info:
     runs-on: ubuntu-latest
 
-    services:
-      sqlserver:
-        image: mcr.microsoft.com/mssql/server:2022-latest
-        env:
-          ACCEPT_EULA: Y
-          SA_PASSWORD: ${{ env.DB_PWD }}
-        ports:
-        - 1433:1433
-        options: >-
-          --health-cmd "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $${SA_PASSWORD} -Q 'SELECT 1' || exit 1" --health-interval 10s --health-timeout 5s --health-retries 30
-        volumes:
-        - ${{ github.workspace }}/SQLBKP:/var/opt/mssql/backups
-
     steps:
-    - name: Checkout master branch
+    - name: Checkout code
       uses: actions/checkout@v4
-      with:
-        ref: master
 
-    - name: Install sqlcmd tools
+    - name: Run Flyway Info
       run: |
-        curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-        curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list | sudo tee /etc/apt/sources.list.d/mssql-release.list
-        sudo apt-get update
-        sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18 mssql-tools18 unixodbc-dev
-        echo "/opt/mssql-tools18/bin" >> $GITHUB_PATH
-
-    - name: Wait for SQL Server to start
-      run: sleep 60
-
-    - name: Wait for SQL Server to accept connections
-      run: |
-        for i in {1..30}; do
-          sqlcmd -S "localhost;Encrypt=no" -U $DB_USER -P $DB_PWD -Q "SELECT 1" && break
-          echo "Waiting for SQL Server to be available..."
-          sleep 2
-        done
-
-    - name: Get logical file names from backup
-      run: |
-        sqlcmd -S "localhost;Encrypt=no" -U $DB_USER -P $DB_PWD -Q "RESTORE FILELISTONLY FROM DISK = N'/var/opt/mssql/backups/SSC.bak'"
-
-    # IMPORTANT: Update the logical file names below after checking the output of the previous step!
-    - name: Restore database
-      run: |
-        sqlcmd -S "localhost;Encrypt=no" -U $DB_USER -P $DB_PWD -Q "
-          RESTORE DATABASE [$DB_NAME] FROM DISK = N'/var/opt/mssql/backups/SSC.bak'
-          WITH MOVE 'LogicalDataFileName' TO '/var/opt/mssql/data/$DB_NAME.mdf',
-               MOVE 'LogicalLogFileName' TO '/var/opt/mssql/data/${DB_NAME}_log.ldf',
-               REPLACE;
-        "
+        docker run --rm \
+          -e FLYWAY_URL="${FLYWAY_URL}" \
+          -e FLYWAY_USER="${FLYWAY_USER}" \
+          -e FLYWAY_PASSWORD="${FLYWAY_PASSWORD}"
